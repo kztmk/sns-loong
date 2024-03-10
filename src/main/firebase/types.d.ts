@@ -5,6 +5,21 @@ export type AppUserType = {
   error: string;
 };
 
+export type UserProfile = {
+  id?: string;
+  email?: string;
+  avatar?: string;
+  image?: string;
+  name?: string;
+  role?: string;
+  tier?: string;
+};
+
+export type LoggedInUserProfile = {
+  user: UserProfile;
+  error: string;
+};
+
 export type NonReturningResultType = {
   error: string;
 };

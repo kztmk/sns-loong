@@ -10,30 +10,37 @@ import {
 
 import firebaseApp from '../index';
 
-import type { AppUserType } from '../types';
+import type { LoggedInUserProfile, UserProfile } from '../types';
 
 const auth = getAuth(firebaseApp);
 
 const firebaseEmailPasswordSignIn = async (email: string, password: string) => {
-  let appUser: AppUserType = {
+  let appUser: UserProfile = {
     id: '',
     email: '',
+    avatar: '',
+    image: '',
     name: '',
+  };
+
+  const loggedInUser: LoggedInUserProfile = {
+    user: appUser,
     error: '',
   };
 
   try {
     const user: UserCredential = await signInWithEmailAndPassword(auth, email, password);
-    (appUser.id = user.user.uid),
-      (appUser.email = user.user.email ?? ''),
-      (appUser.name = user.user.displayName ?? '');
-    return appUser;
+    loggedInUser.user.id = user.user.uid ?? '';
+    loggedInUser.user.email = user.user.email ?? '';
+    loggedInUser.user.name = user.user.displayName ?? '';
+    loggedInUser.user.avatar = user.user.photoURL ?? '';
+    return loggedInUser;
   } catch (error) {
     if (error as AuthError) {
-      appUser.error = (error as AuthError).message;
+      loggedInUser.error = (error as AuthError).message;
       return appUser;
     } else {
-      appUser.error = 'Unknown error';
+      loggedInUser.error = 'Unknown error';
       return appUser;
     }
   }

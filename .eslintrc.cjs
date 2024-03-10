@@ -1,5 +1,5 @@
 module.exports = {
-  plugins: ['@stylistic'],
+  plugins: ['@stylistic', 'formatjs'],
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',

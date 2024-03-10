@@ -38,11 +38,17 @@ export type UserProfile = {
   tier?: string;
 };
 
+export type LoggedInUserProfile = {
+  user: UserProfile;
+  error: string;
+};
+
 export interface AuthProps {
   isLoggedIn: boolean;
   isInitialized?: boolean;
   user?: UserProfile | null;
   token?: string | null;
+  error: string;
 }
 
 export interface AuthActionProps {

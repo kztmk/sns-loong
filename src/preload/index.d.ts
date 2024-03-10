@@ -1,9 +1,9 @@
-import { AppUserType, NonReturningResultType } from '../renderer/types/auth';
+import { LoggedInUserProfile, NonReturningResultType } from '../renderer/types/auth';
 
 declare global {
   interface Window {
     electronAPI: {
-      signIn: (email: string, password: string) => Promise<AppUserType>;
+      signIn: (email: string, password: string) => Promise<LoggedInUserProfile>;
       signOut: () => Promise<NonReturningResultType>;
       sendPasswordResetEmail: (email: string) => Promise<NonReturningResultType>;
       updateEmail: (newEmail: string) => Promise<NonReturningResultType>;

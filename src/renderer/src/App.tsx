@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Loader from './components/Loader';
+import Locales from './components/Locales';
 import Routes from './routes';
 import ThemeCustomization from './themes';
 
@@ -27,15 +28,17 @@ const App = () => {
 
   return (
     <ThemeCustomization>
-      <ScrollTop>
-        <>
-          <Notistack>
-            <Routes />
-            <Customization />
-            <Snackbar />
-          </Notistack>
-        </>
-      </ScrollTop>
+      <Locales>
+        <ScrollTop>
+          <>
+            <Notistack>
+              <Routes />
+              <Customization />
+              <Snackbar />
+            </Notistack>
+          </>
+        </ScrollTop>
+      </Locales>
     </ThemeCustomization>
   );
 };

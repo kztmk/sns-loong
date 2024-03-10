@@ -28,7 +28,7 @@ import AnimateButton from '../../../components/@extended/AnimateButton';
 import IconButton from '../../../components/@extended/IconButton';
 import { useAppDispatch, useAppSelector } from '../../../hooks/rtkHooks';
 import { signIn } from '../../../store/reducers/authSlice';
-import type { AppUserType, KeepMeSignIn } from '../../../types/auth';
+import type { KeepMeSignIn } from '../../../types/auth';
 
 const schema = z.object({
   email: z.string().email('Must be a valid email').max(255).min(1, 'Email is required'),
@@ -48,7 +48,7 @@ const AuthLogin = ({ forgot }: { forgot: string }) => {
   const [checked, setChecked] = useState(false);
   const [capsWarning, setCapsWarning] = useState(false);
 
-  const { isLoggedIn } = useAppSelector((state) => state.auth);
+  const { isLoggedIn, error } = useAppSelector((state) => state.auth);
   const {
     email: savedEmail,
     password: savedPassword,
@@ -93,6 +93,10 @@ const AuthLogin = ({ forgot }: { forgot: string }) => {
     }
   }, []);
 
+  useEffect(() => {
+    setFormErrorMessage(error);
+  }, [error]);
+
   // react-hook-form onSubmit
   const onSubmit = async (data: AuthLoginInputs) => {
     let keepMeSignIn: KeepMeSignIn = {
@@ -118,12 +122,8 @@ const AuthLogin = ({ forgot }: { forgot: string }) => {
       }
       dispatch(saveKeepMeSignInToLocalStorage(keepMeSignIn));
 
-      const user: AppUserType = await window.electronAPI.signIn(data.email, data.password);
-      if (user.error === '') {
-        dispatch(signIn({ user: user }));
-      } else {
-        setFormErrorMessage(user.error);
-      }
+      // sign in
+      dispatch(signIn({ email: data.email, password: data.password }));
     } catch (err: any) {
       const errorMessage = err.message || 'Unexpected error occured';
       setFormErrorMessage(errorMessage);

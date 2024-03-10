@@ -18,7 +18,10 @@
     "build:unpack": "npm run build && electron-builder --dir",
     "build:win": "npm run build && electron-builder --win",
     "build:mac": "electron-vite build && electron-builder --mac",
-    "build:linux": "electron-vite build && electron-builder --linux"
+    "build:linux": "electron-vite build && electron-builder --linux",
+    "extract": "formatjs extract 'src/renderer/src/**/*.ts*' --ignore='**/*.d.ts' --out-file src/renderer/src/utils/locales/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
+    "compile:en": "formatjs compile src/renderer/src/utils/locales/en.json --ast --out-file src/renderer/src/utils/locales/en.json",
+    "compile:ja": "formatjs compile src/renderer/src/utils/locales/ja.json --ast --out-file src/renderer/src/utils/locales/ja.json"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.0",
@@ -43,6 +46,7 @@
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-hook-form": "^7.51.0",
+    "react-intl": "^6.6.2",
     "react-redux": "^9.1.0",
     "react-router-dom": "^6.22.2",
     "react-syntax-highlighter": "^15.5.0",
@@ -55,6 +59,8 @@
     "@electron-toolkit/eslint-config-prettier": "^2.0.0",
     "@electron-toolkit/eslint-config-ts": "^1.0.1",
     "@electron-toolkit/tsconfig": "^1.0.1",
+    "@formatjs/cli": "^6.2.7",
+    "@formatjs/ts-transformer": "^3.13.12",
     "@stylistic/eslint-plugin-ts": "^1.6.2",
     "@types/node": "^18.19.9",
     "@types/react": "^18.2.48",
@@ -65,6 +71,7 @@
     "electron-devtools-installer": "^3.2.0",
     "electron-vite": "^2.0.0",
     "eslint": "^8.56.0",
+    "eslint-plugin-formatjs": "^4.12.2",
     "eslint-plugin-react": "^7.33.2",
     "prettier": "^3.2.4",
     "react": "^18.2.0",
