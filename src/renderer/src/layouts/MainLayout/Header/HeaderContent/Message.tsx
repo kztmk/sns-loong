@@ -65,7 +65,7 @@ const Customization = () => {
                 },
               }}
             >
-              <Box sx={{ p: 2.5 }}>
+              <Box sx={{ p: 2.5, height: '100vh' }}>
                 <Stack
                   direction="row"
                   alignItems="center"
