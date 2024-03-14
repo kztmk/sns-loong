@@ -15,6 +15,8 @@ export type UserProfile = {
   tier?: string;
 };
 
+export type UserProfileWithError = UserProfile & { error: string };
+
 export type LoggedInUserProfile = {
   user: UserProfile;
   error: string;

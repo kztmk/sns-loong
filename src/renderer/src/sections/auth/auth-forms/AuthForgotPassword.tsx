@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
@@ -49,6 +49,18 @@ const AuthForgotPassword = () => {
     defaultValues,
     resolver: zodResolver(schema),
   });
+
+  useEffect(() => {
+    dispatch(
+      openSnackbar({
+        open: true,
+        message: formErrorMessage ?? '',
+        variant: 'alert',
+        alert: { color: 'error' },
+        close: false,
+      })
+    );
+  }, [formErrorMessage]);
 
   const onSubmit = async (data: ResetPasswordInputs) => {
     try {

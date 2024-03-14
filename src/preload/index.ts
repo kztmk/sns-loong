@@ -8,4 +8,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   updatePassword: (newPassword) => ipcRenderer.invoke('firebaseUpdatePassword', newPassword),
   getFromLocalStorage: (key) => ipcRenderer.invoke('getFromLocalStorage', key),
   saveToLocalStorage: (key, value) => ipcRenderer.invoke('saveToLocalStorage', key, value),
+  openFileDialog: ({ title, filters }) => ipcRenderer.invoke('openFileDialog', { title, filters }),
+  openFileDialogForImage: ({ title, filters }) =>
+    ipcRenderer.invoke('openFileDialogForImage', { title, filters }),
+  updateProfile: (profile) => ipcRenderer.invoke('firebaseUpdateProfile', profile),
 });

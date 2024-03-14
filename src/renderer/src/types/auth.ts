@@ -29,14 +29,16 @@ export type AppUserType = {
 };
 
 export type UserProfile = {
-  id?: string;
-  email?: string;
-  avatar?: string;
-  image?: string;
-  name?: string;
-  role?: string;
-  tier?: string;
+  id: string;
+  email: string;
+  avatar: string;
+  image: string;
+  name: string;
+  role: string;
+  tier: string;
 };
+
+export type UserProfileWithError = UserProfile & { error: string };
 
 export type LoggedInUserProfile = {
   user: UserProfile;
@@ -46,7 +48,7 @@ export type LoggedInUserProfile = {
 export interface AuthProps {
   isLoggedIn: boolean;
   isInitialized?: boolean;
-  user?: UserProfile | null;
+  user: UserProfile;
   token?: string | null;
   error: string;
 }

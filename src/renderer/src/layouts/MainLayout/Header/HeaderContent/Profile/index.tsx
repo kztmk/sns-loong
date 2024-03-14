@@ -28,7 +28,7 @@ import ProfileTab from './ProfileTab';
 import SettingTab from './SettingTab';
 
 // assets
-import avatar1 from '../../../../../assets/images/users/avatar-6.png';
+import avatar1 from '../../../../../assets/images/users/default_avatar.png';
 
 // types
 import { ThemeMode } from '../../../../../types/config';
@@ -161,7 +161,7 @@ const ProfilePage = () => {
         aria-haspopup="true"
         onClick={handleToggle}
       >
-        <Avatar alt="profile user" src={avatar1} />
+        <Avatar alt="profile user" src={user.image.length > 0 ? user.image : avatar1} />
       </ButtonBase>
       <Popper
         placement="bottom-end"

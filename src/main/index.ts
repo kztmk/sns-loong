@@ -1,29 +1,30 @@
 import { electronApp, is, optimizer } from '@electron-toolkit/utils';
-import { BrowserWindow, app, ipcMain, shell } from 'electron';
-import installExtension, {
-  REACT_DEVELOPER_TOOLS,
-  REDUX_DEVTOOLS,
-} from 'electron-devtools-installer';
+import { BrowserWindow, app, ipcMain, session, shell } from 'electron';
+import os from 'os';
+import path from 'path';
+
+import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer';
 import Store from 'electron-store';
 import 'firebase/compat/auth';
 import { join } from 'path';
 import icon from '../../resources/icon.png?asset';
-
+// B4TFY9TVXJXxuRhu
 import {
   firebaseEmailPasswordSignIn,
   firebaseSendPasswordResetEmail,
   firebaseSignOut,
+  firebaseUpDateProfile,
   firebaseUpdateEmail,
   firebaseUpdatePassword,
 } from './firebase/auth';
 
 import {
+  DefaultConfigProps,
   MenuOrientation,
   ThemeDirection,
   ThemeMode,
-  type DefaultConfigProps,
 } from '../renderer/src/types/config';
-
+import { openFileDialog, openFileDialogForImage } from './fileSystem';
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -71,7 +72,18 @@ const store = new Store<DefaultConfigProps>({
 app.whenReady().then(() => {
   // Install DevTools
   if (is.dev) {
-    installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
+    // react-devtools fmkadmapgofadopljbjfkapdkoienihi
+    const reactDevToolsPath = path.join(
+      os.homedir(),
+      '/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/5.0.2_8'
+    );
+
+    async () => {
+      await session.defaultSession.loadExtension(reactDevToolsPath, { allowFileAccess: true });
+      await session.defaultSession.loadExtension(reactDevToolsPath, { allowFileAccess: true });
+    };
+
+    installExtension([REDUX_DEVTOOLS])
       .then((name) => console.log(`Added Extension: ${name}`))
       .catch((err) => console.log('An error occurred: ', err));
   }
@@ -132,6 +144,19 @@ app.whenReady().then(() => {
   // Firebase user email update
   ipcMain.handle('firebaseUpdateEmail', async (event, email) => {
     return await firebaseUpdateEmail(email);
+  });
+  // Firebase update user profile
+  ipcMain.handle('firebaseUpdateProfile', async (event, profile) => {
+    return await firebaseUpDateProfile(profile);
+  });
+
+  // Handle file System
+  ipcMain.handle('openFileDialog', async (event, args) => {
+    return await openFileDialog(args);
+  });
+
+  ipcMain.handle('openFileDialogForImage', async (event, args) => {
+    return await openFileDialogForImage(args);
   });
 
   createWindow();

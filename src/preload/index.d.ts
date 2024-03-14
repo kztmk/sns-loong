@@ -1,5 +1,8 @@
-import { LoggedInUserProfile, NonReturningResultType } from '../renderer/types/auth';
-
+import {
+  LoggedInUserProfile,
+  NonReturningResultType,
+  UserProfileWithError,
+} from '../renderer/src/types/auth';
 declare global {
   interface Window {
     electronAPI: {
@@ -10,6 +13,9 @@ declare global {
       updatePassword: (newPassword: string) => Promise<NonReturningResultType>;
       getFromLocalStorage: (key: string) => Promise<string | undefined>;
       saveToLocalStorage: (key: string, value: string) => Promise<NonReturningResultType>;
+      openFileDialog: (args: OpenFileDialogArgs) => Promise<OpenDialogReturnType>;
+      openFileDialogForImage: (args: OpenFileDialogArgs) => Promise<OpenDialogForImageReturnType>;
+      updateProfile: (profile: UserProfile) => Promise<UserProfileWithError>;
     };
   }
 }
