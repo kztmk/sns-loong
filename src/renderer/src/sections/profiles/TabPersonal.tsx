@@ -4,6 +4,11 @@ import { useEffect, useState } from 'react';
 import {
   Box,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   FormHelperText,
   FormLabel,
   Grid,
@@ -18,14 +23,15 @@ import { useTheme } from '@mui/material/styles';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { FormattedMessage } from 'react-intl';
+import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
-
 // project-imports
 import Avatar from '../../components/@extended/Avatar';
 import MainCard from '../../components/MainCard';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/rtkHooks';
-import { updateAvatar, updateProfile } from '../../store/reducers/authSlice';
+import { useUpdateEffect } from '../../hooks/useUpdateEffect';
+import { confirmEmail, signOut, updateAvatar, updateProfile } from '../../store/reducers/authSlice';
 import { openSnackbar } from '../../store/reducers/snackbarSlice';
 // assets
 import { Camera } from 'iconsax-react';
@@ -36,7 +42,7 @@ import { ThemeMode } from '../../types/config';
 
 // field validation schema
 const schema = z.object({
-  displayName: z.string().min(1, 'Display Name is required'),
+  displayName: z.string(),
   email: z.string().email('Must be a valid email').max(255).min(1, 'Email is required'),
 });
 
@@ -59,7 +65,24 @@ const TabPersonal = () => {
   const theme = useTheme();
   const [avatar, setAvatar] = useState<string | undefined>(defaultAvatar);
 
-  const { id, email, name, avatar: photoUrl, image } = useAppSelector((state) => state.auth.user);
+  // verification code dialog
+  const [open, setOpen] = useState(false);
+  const [code, setCode] = useState('');
+
+  const navigate = useNavigate();
+  const handleClose = (buttonName: string) => {
+    setOpen(false);
+    dispatch(confirmEmail());
+  };
+
+  const {
+    id,
+    email,
+    name,
+    avatar: photoUrl,
+    image,
+    verifyEmail,
+  } = useAppSelector((state) => state.auth.user);
   const { error: authError } = useAppSelector((state) => state.auth);
 
   const defaultValues: PersonalInfoInputs = {
@@ -74,7 +97,8 @@ const TabPersonal = () => {
     dispatch(updateAvatar());
   };
 
-  useEffect(() => {
+  // watch for avator
+  useUpdateEffect(() => {
     if (photoUrl && photoUrl.length > 0) {
       setAvatar(image);
       dispatch(updateProfile({ id, email, avatar: photoUrl, image, name, role: '', tier: '' }));
@@ -83,6 +107,7 @@ const TabPersonal = () => {
     }
   }, [photoUrl]);
 
+  // watch for authError
   useEffect(() => {
     if (authError.length > 0) {
       dispatch(
@@ -97,14 +122,30 @@ const TabPersonal = () => {
     }
   }, [authError]);
 
+  // watch for verifyEmail
+  useUpdateEffect(() => {
+    if (verifyEmail === 'pending') {
+      setOpen(true);
+    }
+    if (verifyEmail === 'success') {
+      dispatch(signOut());
+    }
+  }, [verifyEmail]);
+
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues,
     resolver: zodResolver(schema),
   });
+
+  const handleClear = () => {
+    setValue('displayName', '');
+    setValue('email', '');
+  };
 
   const onSubmit = (data: PersonalInfoInputs) => {
     const userProfile: UserProfile = {
@@ -245,14 +286,35 @@ const TabPersonal = () => {
       </Grid>
       <Grid item xs={12} sm={6}>
         <Stack direction="row" justifyContent="flex-end" alignItems="center" spacing={2}>
-          <Button variant="outlined" color="secondary">
-            Cancel
+          <Button variant="outlined" color="secondary" onClick={handleClear}>
+            Clear
           </Button>
           <Button form="personal-info-form" type="submit" variant="contained">
             Update Profile
           </Button>
         </Stack>
       </Grid>
+      <Dialog open={open} onClose={handleClose}>
+        <Box sx={{ p: 1, py: 1.5 }}>
+          <DialogTitle>Change Mail Address</DialogTitle>
+          <DialogContent>
+            <DialogContentText sx={{ mb: 2 }}>
+              You recieve a varification email in your new mailbox. Please click link for verify and
+              change mail address. If you do not find the mail, please check the spam folder.
+            </DialogContentText>
+            <DialogContentText sx={{ mb: 2 }}>
+              Closing this dialog will sign you out. Please complete the email address change and
+              then sign in again. Until the change is complete, you can sign in with your previous
+              email address
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button variant="contained" onClick={() => handleClose('proceed')}>
+              OK
+            </Button>
+          </DialogActions>
+        </Box>
+      </Dialog>
     </Grid>
   );
 };

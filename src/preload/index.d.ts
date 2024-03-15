@@ -16,6 +16,7 @@ declare global {
       openFileDialog: (args: OpenFileDialogArgs) => Promise<OpenDialogReturnType>;
       openFileDialogForImage: (args: OpenFileDialogArgs) => Promise<OpenDialogForImageReturnType>;
       updateProfile: (profile: UserProfile) => Promise<UserProfileWithError>;
+      veryfyEmail: (code: string) => Promise<NonReturningResultType>;
     };
   }
 }

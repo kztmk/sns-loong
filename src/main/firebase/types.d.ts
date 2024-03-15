@@ -15,7 +15,10 @@ export type UserProfile = {
   tier?: string;
 };
 
-export type UserProfileWithError = UserProfile & { error: string };
+export type UserProfileWithError = UserProfile & {
+  error: string;
+  verifyEmail: 'idel' | 'pending' | 'success';
+};
 
 export type LoggedInUserProfile = {
   user: UserProfile;
