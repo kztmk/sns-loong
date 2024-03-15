@@ -10,7 +10,7 @@ import type {
 } from '../../types/auth';
 import { OpenFileDialogForImageReturnType } from '../../types/fileSystem';
 
-const defaultUser: UserProfile = {
+const defaultUser: UserProfileWithError = {
   id: '',
   email: '',
   avatar: '',
@@ -18,6 +18,8 @@ const defaultUser: UserProfile = {
   name: '',
   role: '',
   tier: '',
+  error: '',
+  verifyEmail: 'idel',
 };
 
 const initialState: AuthProps = {
@@ -31,7 +33,11 @@ const initialState: AuthProps = {
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    confirmEmail: (state) => {
+      state.user.verifyEmail = 'success';
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(signIn.pending, (state) => {
       state.isInitialized = false;
@@ -92,6 +98,7 @@ const authSlice = createSlice({
       state.user.role = action.payload.role;
       state.user.tier = action.payload.tier;
       state.user.email = action.payload.email;
+      state.user.verifyEmail = action.payload.verifyEmail;
     });
     builder.addCase(updateProfile.rejected, (state, action) => {
       state.isInitialized = true;
@@ -181,4 +188,6 @@ export const updateProfile = createAsyncThunk<
     return thunkApi.rejectWithValue({ error: error.message });
   }
 });
+
+export const { confirmEmail } = authSlice.actions;
 export default authSlice.reducer;

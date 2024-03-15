@@ -14,8 +14,8 @@ import {
   firebaseSendPasswordResetEmail,
   firebaseSignOut,
   firebaseUpDateProfile,
-  firebaseUpdateEmail,
   firebaseUpdatePassword,
+  firebaseVerifyEmail,
 } from './firebase/auth';
 
 import {
@@ -141,13 +141,14 @@ app.whenReady().then(() => {
   ipcMain.handle('firebaseUpdatePassword', async (event, password) => {
     return await firebaseUpdatePassword(password);
   });
-  // Firebase user email update
-  ipcMain.handle('firebaseUpdateEmail', async (event, email) => {
-    return await firebaseUpdateEmail(email);
-  });
+
   // Firebase update user profile
   ipcMain.handle('firebaseUpdateProfile', async (event, profile) => {
     return await firebaseUpDateProfile(profile);
+  });
+  // Firebase verify email
+  ipcMain.handle('firebaseVerifyEmail', async (event, code) => {
+    return await firebaseVerifyEmail(code);
   });
 
   // Handle file System

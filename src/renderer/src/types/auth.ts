@@ -38,7 +38,10 @@ export type UserProfile = {
   tier: string;
 };
 
-export type UserProfileWithError = UserProfile & { error: string };
+export type UserProfileWithError = UserProfile & {
+  error: string;
+  verifyEmail: 'idel' | 'pending' | 'success';
+};
 
 export type LoggedInUserProfile = {
   user: UserProfile;
@@ -48,7 +51,7 @@ export type LoggedInUserProfile = {
 export interface AuthProps {
   isLoggedIn: boolean;
   isInitialized?: boolean;
-  user: UserProfile;
+  user: UserProfileWithError;
   token?: string | null;
   error: string;
 }

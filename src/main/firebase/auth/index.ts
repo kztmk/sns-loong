@@ -1,12 +1,14 @@
 import {
   AuthError,
   UserCredential,
+  applyActionCode,
   getAuth,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   updateEmail,
   updatePassword,
   updateProfile,
+  verifyBeforeUpdateEmail,
 } from 'firebase/auth';
 
 import firebaseApp from '../index';
@@ -96,36 +98,80 @@ const firebaseUpdatePassword = async (newPassword: string) => {
     const user = auth.currentUser;
     if (user) {
       await updatePassword(auth.currentUser, newPassword);
-      return returnError('');
+      return { error: '' };
     } else {
-      return returnError('current user not found');
+      return { error: 'current user not found' };
     }
   } catch (error) {
-    return returnError('Unknown error');
+    if (error as AuthError) {
+      return { error: (error as AuthError).message };
+    }
+    return { error: 'Unknown error' };
   }
 };
 
 const firebaseUpDateProfile = async (profile: UserProfile) => {
   try {
     const user = auth.currentUser;
+    let verifyEmail = 'idle';
     if (user) {
       await updateProfile(auth.currentUser, {
         displayName: profile.name,
         photoURL: profile.avatar,
       });
+      console.log('profile update done');
+      // update email?
+      if (profile.email && user.email !== profile.email) {
+        await verifyBeforeUpdateEmail(auth.currentUser, profile.email);
+        verifyEmail = 'pending';
+      }
       return {
         id: user.uid,
-        email: user.email,
+        email: profile.email,
         name: user.displayName,
-        avatar: user.photoURL,
+        avatar: profile.avatar,
         image: profile.image,
         error: '',
+        verifyEmail: verifyEmail,
       };
     } else {
       return { ...profile, error: 'current user not found' };
     }
   } catch (error) {
+    console.log('error: ', error);
     return { ...profile, error: 'Unknown error' };
+  }
+};
+
+const firebaseVerifyEmail = async (code: string) => {
+  try {
+    const user = auth.currentUser;
+    if (user) {
+      await applyActionCode(auth, code);
+      return { error: '' };
+    } else {
+      return { error: 'Unkonwn error' };
+    }
+  } catch (error) {
+    if (error as AuthError) {
+      switch ((error as AuthError).code) {
+        case 'auth/expired-action-code':
+          return { error: 'The action code has expired.' };
+        case 'auth/invalid-verification-code':
+          return {
+            error:
+              'The action code is invalid. This can happen if the code is malformed, expired, or has already been used.',
+          };
+        case 'auth/user-disabled':
+          return { error: 'The user corresponding to the provided action code has been disabled.' };
+        case 'auth/user-not-found':
+          return { error: 'The user corresponding to the action code was not found.' };
+        default:
+          return { error: 'Unknown auth error' };
+      }
+    } else {
+      return { error: 'Unknown error can not convert to AuthError' };
+    }
   }
 };
 
@@ -134,7 +180,7 @@ export {
   firebaseSendPasswordResetEmail,
   firebaseSignOut,
   firebaseUpDateProfile,
-  firebaseUpdateEmail,
   firebaseUpdatePassword,
+  firebaseVerifyEmail,
   getCurrentUserId,
 };
