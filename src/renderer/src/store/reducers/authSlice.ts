@@ -104,6 +104,16 @@ const authSlice = createSlice({
       state.isInitialized = true;
       state.error = action.payload === undefined ? '' : action.payload.error;
     });
+    builder.addCase(updatePassword.pending, (state) => {
+      state.isInitialized = false;
+    }),
+      builder.addCase(updatePassword.fulfilled, (state) => {
+        state.isInitialized = true;
+      }),
+      builder.addCase(updatePassword.rejected, (state, action) => {
+        state.isInitialized = true;
+        state.error = action.payload === undefined ? '' : action.payload.error;
+      });
   },
 });
 
@@ -179,6 +189,25 @@ export const updateProfile = createAsyncThunk<
 >(`auth/upDateProfile`, async (args, thunkApi) => {
   try {
     const response = await window.electronAPI.updateProfile(args);
+    if (response.error.length === 0) {
+      return response;
+    } else {
+      return thunkApi.rejectWithValue({ error: response.error });
+    }
+  } catch (error: any) {
+    return thunkApi.rejectWithValue({ error: error.message });
+  }
+});
+
+export const updatePassword = createAsyncThunk<
+  NonReturningResultType,
+  string,
+  {
+    rejectValue: { error: string };
+  }
+>('auth/updatePassword', async (args, thunkApi) => {
+  try {
+    const response = await window.electronAPI.updatePassword(args);
     if (response.error.length === 0) {
       return response;
     } else {
