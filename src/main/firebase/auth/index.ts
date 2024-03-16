@@ -33,6 +33,7 @@ const firebaseEmailPasswordSignIn = async (email: string, password: string) => {
   };
 
   try {
+    console.log('signInWithEmailAndPassword: ', email, password);
     const user: UserCredential = await signInWithEmailAndPassword(auth, email, password);
     loggedInUser.user.id = user.user.uid ?? '';
     loggedInUser.user.email = user.user.email ?? '';
@@ -44,11 +45,13 @@ const firebaseEmailPasswordSignIn = async (email: string, password: string) => {
     return loggedInUser;
   } catch (error) {
     if (error as AuthError) {
+      console.log('signInWithEmailAndPassword error: ', (error as AuthError).message);
       loggedInUser.error = (error as AuthError).message;
-      return appUser;
+
+      return loggedInUser;
     } else {
       loggedInUser.error = 'Unknown error';
-      return appUser;
+      return loggedInUser;
     }
   }
 };

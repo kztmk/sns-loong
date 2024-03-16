@@ -8,7 +8,7 @@ const Dashboard = Loadable(lazy(() => import('../pages/dashboard')));
 // profiles
 const AccountProfile = Loadable(lazy(() => import('../pages/profiles/')));
 const AccountTabPersonal = Loadable(lazy(() => import('../sections/profiles/TabPersonal')));
-// const AccountTabPassword = Loadable(lazy(() => import('sections/profiles/TabPassword')));
+const AccountTabPassword = Loadable(lazy(() => import('../sections/profiles/TabPassword')));
 // const AccountTabSettings = Loadable(lazy(() => import('sections/profiles/TabSettings')));
 
 const MainRoutes = {
@@ -24,7 +24,7 @@ const MainRoutes = {
       children: [
         {
           path: 'dashboard',
-          element: <AccountTabPersonal />,
+          element: <AccountTabPassword />,
         },
       ],
     },
@@ -35,7 +35,7 @@ const MainRoutes = {
           path: 'account',
           element: <AccountProfile />,
           children: [
-            { path: 'personal', element: <AccountTabPersonal /> },
+            { path: 'personal', element: <AccountTabPassword /> },
             {
               /* path: 'password', element: <AccountTabPassword /> },
           { path: 'settings', element: <AccountTabSettings /> */
