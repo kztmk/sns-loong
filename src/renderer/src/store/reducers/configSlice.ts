@@ -84,7 +84,7 @@ export const saveConfigToLocalStorage = createAsyncThunk<
     if (response.error.length === 0) {
       return newConfig;
     } else {
-      return thunkApi.rejectWithValue(response.error);
+      return thunkApi.rejectWithValue({ error: response.error });
     }
   } catch (error: any) {
     return thunkApi.rejectWithValue(error.message);

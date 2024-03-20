@@ -19,7 +19,7 @@ import horizontalLayout from '../../assets/images/customization/horizontal.svg';
 import defaultLayout from '../../assets/images/customization/vertical.svg';
 
 // types
-import { saveConfigToLocalStorage } from '@renderer/store/reducers/configSlice';
+import { saveConfigToLocalStorage } from '../../store/reducers/configSlice';
 import { MenuOrientation } from '../../types/config';
 
 // ==============================|| CUSTOMIZATION - CONTAINER ||============================== //

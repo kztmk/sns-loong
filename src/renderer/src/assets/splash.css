@@ -1,0 +1,21 @@
+.image-container {
+  position: relative;
+  width: 600px;
+  height: 600px;
+}
+
+.background-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 画像がコンテナのサイズに合うように調整 */
+}
+
+.centered-text {
+  position: absolute;
+  top: 60%; /* 画像の中心から20%下 */
+  left: 50%; /* 水平中央 */
+  transform: translate(-50%, -50%); /* 正確な中心位置を調整 */
+  color: white; /* 文字色は白（背景に応じて変更可能） */
+  font-size: 24px; /* 文字のサイズ */
+  text-align: center; /* テキストを中央揃え */
+}

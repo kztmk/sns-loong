@@ -30,7 +30,7 @@ function getSizeStyle(size?: CustomSwitchSize): SwitchSizeProps {
   }
 }
 
-function switchStyle(theme: Theme, size?: CustomSwitchSize) {
+function switchStyle(_theme: Theme, size?: CustomSwitchSize) {
   const sizes: SwitchSizeProps = getSizeStyle(size);
 
   return {

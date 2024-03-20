@@ -5,7 +5,6 @@ import Routes from './routes';
 import ThemeCustomization from './themes';
 
 import Snackbar from './components/@extended/Snackbar';
-import Customization from './components/Customization';
 import ScrollTop from './components/ScrollTop';
 import Notistack from './components/third-party/Notistack';
 
@@ -33,7 +32,6 @@ const App = () => {
           <>
             <Notistack>
               <Routes />
-              <Customization />
               <Snackbar />
             </Notistack>
           </>

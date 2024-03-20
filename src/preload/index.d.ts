@@ -6,6 +6,7 @@ import {
 declare global {
   interface Window {
     electronAPI: {
+      getVersion: () => Promise<string>;
       signIn: (email: string, password: string) => Promise<LoggedInUserProfile>;
       signOut: () => Promise<NonReturningResultType>;
       sendPasswordResetEmail: (email: string) => Promise<NonReturningResultType>;

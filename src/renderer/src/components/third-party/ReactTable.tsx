@@ -117,7 +117,7 @@ export const TablePagination = ({
     setOpen(true);
   };
 
-  const handleChangePagination = (event: ChangeEvent<unknown>, value: number) => {
+  const handleChangePagination = (_event: ChangeEvent<unknown>, value: number) => {
     gotoPage(value - 1);
   };
 

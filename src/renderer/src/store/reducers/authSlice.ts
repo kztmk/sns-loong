@@ -28,6 +28,7 @@ const initialState: AuthProps = {
   user: defaultUser,
   token: null,
   error: '',
+  updateItem: 'idle',
 };
 
 const authSlice = createSlice({
@@ -41,6 +42,8 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(signIn.pending, (state) => {
       state.isInitialized = false;
+      state.error = '';
+      state.updateItem = 'idle';
     });
     builder.addCase(signIn.fulfilled, (state, action) => {
       state.isInitialized = true;
@@ -61,6 +64,8 @@ const authSlice = createSlice({
     });
     builder.addCase(signOut.pending, (state) => {
       state.isInitialized = false;
+      state.error = '';
+      state.updateItem = 'idle';
     });
     builder.addCase(signOut.fulfilled, (state) => {
       state.isInitialized = true;
@@ -75,6 +80,8 @@ const authSlice = createSlice({
     });
     builder.addCase(updateAvatar.pending, (state) => {
       state.isInitialized = false;
+      state.error = '';
+      state.updateItem = 'avatar';
     });
     builder.addCase(updateAvatar.fulfilled, (state, action) => {
       state.isInitialized = true;
@@ -89,6 +96,8 @@ const authSlice = createSlice({
     });
     builder.addCase(updateProfile.pending, (state) => {
       state.isInitialized = false;
+      state.error = '';
+      state.updateItem = 'profile';
     });
     builder.addCase(updateProfile.fulfilled, (state, action) => {
       state.isInitialized = true;
@@ -106,6 +115,8 @@ const authSlice = createSlice({
     });
     builder.addCase(updatePassword.pending, (state) => {
       state.isInitialized = false;
+      state.error = '';
+      state.updateItem = 'password';
     }),
       builder.addCase(updatePassword.fulfilled, (state) => {
         state.isInitialized = true;

@@ -27,8 +27,10 @@ import { Eye, EyeSlash, Minus, TickCircle } from 'iconsax-react';
 // project imports
 import { useForm } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from '../../hooks/rtkHooks';
-import { updatePassword } from '../../store/reducers/authSlice';
+import { useUpdateEffect } from '../../hooks/useUpdateEffect';
+import { signOut, updatePassword } from '../../store/reducers/authSlice';
 import { openSnackbar } from '../../store/reducers/snackbarSlice';
+
 import {
   isLowercaseChar,
   isNumber,
@@ -81,7 +83,8 @@ const TabPassword = () => {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [onUpdate, setOnUpdate] = useState(true);
+  const [onUpdate, setOnUpdate] = useState(false);
+  const [snackBarOpen, setSnackBarOpen] = useState(false);
 
   const handleClickShowOldPassword = () => {
     setShowOldPassword(!showOldPassword);
@@ -97,8 +100,9 @@ const TabPassword = () => {
     event.preventDefault();
   };
 
-  const dispach = useAppDispatch();
-  const { isInitialized, error } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+  const { isInitialized, error, updateItem } = useAppSelector((state) => state.auth);
+  const { open } = useAppSelector((state) => state.snackbar);
 
   const {
     register,
@@ -123,36 +127,55 @@ const TabPassword = () => {
   }, [password]);
 
   const onSubmit = (data: TabPasswordInputs) => {
-    dispach(updatePassword(data.password));
+    dispatch(updatePassword(data.password));
   };
 
-  useEffect(() => {
-    if (!isInitialized) {
+  useUpdateEffect(() => {
+    if (!isInitialized && updateItem === 'password') {
+      // set update start
+      setOnUpdate(true);
+    }
+
+    if (isInitialized && onUpdate && updateItem === 'password') {
+      // set update done
       setOnUpdate(false);
-    } else {
       if (error.length === 0) {
-        dispach(
+        dispatch(
           openSnackbar({
+            transition: 'SlideLeft',
+            anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
             open: true,
-            message: 'Password Updated Successfully',
-            variant: 'success',
+            message: 'Password Updated Successfully. Please sign in with new password.',
+            variant: 'alert',
             alert: { color: 'success' },
             close: false,
           })
         );
       } else {
-        dispach(
+        dispatch(
           openSnackbar({
+            transition: 'SlideLeft',
+            anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
             open: true,
             message: error,
-            variant: 'error',
+            variant: 'alert',
             alert: { color: 'error' },
             close: false,
           })
         );
       }
     }
-  }, [isInitialized]);
+  }, [isInitialized, updateItem]);
+
+  useUpdateEffect(() => {
+    if (open) {
+      setSnackBarOpen(true);
+    } else {
+      if (snackBarOpen) {
+        dispatch(signOut());
+      }
+    }
+  }, [open]);
 
   const clearForm = () => {
     reset();

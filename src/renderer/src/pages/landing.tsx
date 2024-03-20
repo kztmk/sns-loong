@@ -1,8 +1,42 @@
+import { useState } from 'react';
 import electronLogo from '../assets/electron.svg';
 
 import { Link } from 'react-router-dom';
 
+// material-ui
+import { Slide, SlideProps } from '@mui/material';
+// assets
+
+// project-imports
+import { useAppDispatch } from '../hooks/rtkHooks';
+import { openSnackbar } from '../store/reducers/snackbarSlice';
+// animation function
+const TransitionSlideLeft = (props: SlideProps) => {
+  return <Slide {...props} direction="left" />;
+};
+
 function Landing(): JSX.Element {
+  const [open, setOpen] = useState(false);
+  const dispatch = useAppDispatch();
+
+  const handleOpen = () => {
+    dispatch(
+      openSnackbar({
+        anchorOrigin: { vertical: 'bottom', horizontal: 'right' },
+        transition: 'SlideLeft',
+        open: true,
+        message: 'Password Updated Successfully',
+        variant: 'alert',
+        alert: { color: 'success' },
+        close: false,
+      })
+    );
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <>
       <img alt="logo" className="logo" src={electronLogo} />
@@ -20,6 +54,7 @@ function Landing(): JSX.Element {
             Documentation
           </a>
         </div>
+        <button onClick={handleOpen}>Open Snackbar</button>
         <div className="action">
           <Link to="/dashboard">Dashboard</Link>
         </div>

@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/rtkHooks';
 import MainCard from '../MainCard';
 
 // types
-import { saveConfigToLocalStorage } from '@renderer/store/reducers/configSlice';
+import { saveConfigToLocalStorage } from '../../store/reducers/configSlice';
 import { PresetColor, ThemeMode } from '../../types/config';
 
 interface ColorProps {

@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
 contextBridge.exposeInMainWorld('electronAPI', {
+  getVersion: () => ipcRenderer.invoke('getAppVersion'),
   signIn: (email, password) => ipcRenderer.invoke('firebaseEmailPasswordSignIn', email, password),
   signOut: () => ipcRenderer.invoke('firebaseSignOut'),
   sendPasswordResetEmail: (email) => ipcRenderer.invoke('firebaseSendPasswordResetEmail', email),

@@ -4,8 +4,8 @@ import { useTheme } from '@mui/material/styles';
 // assets
 import { Mask } from 'iconsax-react';
 // project-imports
-import { saveConfigToLocalStorage } from '@renderer/store/reducers/configSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/rtkHooks';
+import { saveConfigToLocalStorage } from '../../store/reducers/configSlice';
 import MainCard from '../MainCard';
 
 // ==============================|| CUSTOMIZATION - MODE ||============================== //

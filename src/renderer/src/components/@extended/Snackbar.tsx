@@ -51,7 +51,7 @@ const Snackbar = () => {
     useAppSelector((state) => state.snackbar);
 
   const dispatch = useAppDispatch();
-  const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
+  const handleClose = (_event: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }

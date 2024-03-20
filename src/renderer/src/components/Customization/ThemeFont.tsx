@@ -9,7 +9,7 @@ import { HEADER_HEIGHT } from '../../config';
 import { useAppDispatch, useAppSelector } from '../../hooks/rtkHooks';
 import MainCard from '../MainCard';
 
-import { saveConfigToLocalStorage } from '@renderer/store/reducers/configSlice';
+import { saveConfigToLocalStorage } from '../../store/reducers/configSlice';
 import { FontFamily } from '../../types/config';
 
 // ==============================|| CUSTOMIZATION - FONT FAMILY ||============================== //

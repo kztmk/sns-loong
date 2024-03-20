@@ -64,7 +64,7 @@ export const saveKeepMeSignInToLocalStorage = createAsyncThunk<
     if (response.error.length === 0) {
       return keepMeSignIn;
     } else {
-      return thunkApi.rejectWithValue(response.error);
+      return thunkApi.rejectWithValue({ error: response.error });
     }
   } catch (error: any) {
     return thunkApi.rejectWithValue({ error: error.message });
