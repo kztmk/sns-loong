@@ -7,9 +7,9 @@ import { useAppDispatch, useAppSelector } from '../../hooks/rtkHooks';
 import MainCard from '../MainCard';
 
 // assets
-import { saveConfigToLocalStorage } from '@renderer/store/reducers/configSlice';
 import Caption from '../../assets/images/customization/caption.svg';
 import NoCaption from '../../assets/images/customization/no-caption.svg';
+import { saveConfigToLocalStorage } from '../../store/reducers/configSlice';
 
 // ==============================|| CUSTOMIZATION - MODE ||============================== //
 

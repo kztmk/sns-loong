@@ -1,7 +1,6 @@
 // material-ui
 import { Grid, Stack, Typography } from '@mui/material';
 
-import { useAppSelector } from '../../hooks/rtkHooks';
 // project-imports
 import AuthWrapper from '../../sections/auth/AuthWrapper';
 import AuthLogin from '../../sections/auth/auth-forms/AuthLogin';
@@ -9,8 +8,6 @@ import AuthLogin from '../../sections/auth/auth-forms/AuthLogin';
 // ================================|| LOGIN ||================================ //
 
 const Login = () => {
-  const { isLoggedIn } = useAppSelector((state) => state.auth);
-
   return (
     <AuthWrapper>
       <Grid container spacing={3}>

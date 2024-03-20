@@ -23,7 +23,6 @@ import { useTheme } from '@mui/material/styles';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { FormattedMessage } from 'react-intl';
-import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 // project-imports
 import Avatar from '../../components/@extended/Avatar';
@@ -31,7 +30,7 @@ import MainCard from '../../components/MainCard';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/rtkHooks';
 import { useUpdateEffect } from '../../hooks/useUpdateEffect';
-import { confirmEmail, signOut, updateAvatar, updateProfile } from '../../store/reducers/authSlice';
+import { confirmEmail, updateAvatar, updateProfile } from '../../store/reducers/authSlice';
 import { openSnackbar } from '../../store/reducers/snackbarSlice';
 // assets
 import { Camera } from 'iconsax-react';
@@ -48,17 +47,6 @@ const schema = z.object({
 
 type PersonalInfoInputs = z.infer<typeof schema>;
 
-// styles & constant
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-    },
-  },
-};
-
 // ==============================|| ACCOUNT PROFILE - PERSONAL ||============================== //
 
 const TabPersonal = () => {
@@ -67,10 +55,8 @@ const TabPersonal = () => {
 
   // verification code dialog
   const [open, setOpen] = useState(false);
-  const [code, setCode] = useState('');
 
-  const navigate = useNavigate();
-  const handleClose = (buttonName: string) => {
+  const handleClose = () => {
     setOpen(false);
     dispatch(confirmEmail());
   };
@@ -83,7 +69,7 @@ const TabPersonal = () => {
     image,
     verifyEmail,
   } = useAppSelector((state) => state.auth.user);
-  const { error: authError } = useAppSelector((state) => state.auth);
+  const { isInitialized, error: authError, updateItem } = useAppSelector((state) => state.auth);
 
   const defaultValues: PersonalInfoInputs = {
     displayName: name,
@@ -99,7 +85,7 @@ const TabPersonal = () => {
 
   // watch for avator
   useUpdateEffect(() => {
-    if (photoUrl && photoUrl.length > 0) {
+    if (photoUrl && photoUrl.length > 0 && updateItem === 'avatar') {
       setAvatar(image);
       dispatch(updateProfile({ id, email, avatar: photoUrl, image, name, role: '', tier: '' }));
     } else {
@@ -107,30 +93,43 @@ const TabPersonal = () => {
     }
   }, [photoUrl]);
 
-  // watch for authError
   useEffect(() => {
-    if (authError.length > 0) {
-      dispatch(
-        openSnackbar({
-          open: true,
-          message: authError,
-          variant: 'alert',
-          alert: { color: 'error' },
-          close: false,
-        })
-      );
+    if (image.length > 0) {
+      setAvatar(image);
     }
-  }, [authError]);
+  }, []);
 
-  // watch for verifyEmail
-  useUpdateEffect(() => {
-    if (verifyEmail === 'pending') {
-      setOpen(true);
+  useEffect(() => {
+    if (!isInitialized) {
+      // now on update
+    } else {
+      if (updateItem === 'profile' && authError.length === 0) {
+        if (verifyEmail === 'pending') {
+          setOpen(true);
+        } else {
+          dispatch(
+            openSnackbar({
+              open: true,
+              message: 'Dispaly name updated successfully',
+              variant: 'alert',
+              alert: { color: 'success' },
+              close: true,
+            })
+          );
+        }
+      } else if (updateItem === 'profile' && authError.length > 0) {
+        dispatch(
+          openSnackbar({
+            open: true,
+            message: authError,
+            variant: 'alert',
+            alert: { color: 'error' },
+            close: false,
+          })
+        );
+      }
     }
-    if (verifyEmail === 'success') {
-      dispatch(signOut());
-    }
-  }, [verifyEmail]);
+  }, [isInitialized]);
 
   const {
     control,
@@ -309,7 +308,7 @@ const TabPersonal = () => {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button variant="contained" onClick={() => handleClose('proceed')}>
+            <Button variant="contained" onClick={handleClose}>
               OK
             </Button>
           </DialogActions>

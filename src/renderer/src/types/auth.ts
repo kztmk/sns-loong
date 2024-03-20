@@ -54,6 +54,7 @@ export interface AuthProps {
   user: UserProfileWithError;
   token?: string | null;
   error: string;
+  updateItem: 'profile' | 'avatar' | 'password' | 'idle';
 }
 
 export interface AuthActionProps {

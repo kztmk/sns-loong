@@ -5,7 +5,6 @@ import {
   getAuth,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
-  updateEmail,
   updatePassword,
   updateProfile,
   verifyBeforeUpdateEmail,
@@ -82,19 +81,19 @@ const firebaseSendPasswordResetEmail = async (email: string) => {
   }
 };
 
-const firebaseUpdateEmail = async (newEmail: string) => {
-  try {
-    const user = auth.currentUser;
-    if (user) {
-      await updateEmail(auth.currentUser, newEmail);
-      return returnError('');
-    } else {
-      return returnError('current user not found');
-    }
-  } catch (error) {
-    return returnError('Unknown error');
-  }
-};
+// const firebaseUpdateEmail = async (newEmail: string) => {
+//   try {
+//     const user = auth.currentUser;
+//     if (user) {
+//       await updateEmail(auth.currentUser, newEmail);
+//       return returnError('');
+//     } else {
+//       return returnError('current user not found');
+//     }
+//   } catch (error) {
+//     return returnError('Unknown error');
+//   }
+// };
 
 const firebaseUpdatePassword = async (newPassword: string) => {
   try {

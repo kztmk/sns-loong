@@ -7,9 +7,9 @@ import { useAppDispatch, useAppSelector } from '../../hooks/rtkHooks';
 import MainCard from '../MainCard';
 
 // assets
-import { saveConfigToLocalStorage } from '@renderer/store/reducers/configSlice';
 import containerLayout from '../../assets/images/customization/container.svg';
 import defaultLayout from '../../assets/images/customization/fluid.svg';
+import { saveConfigToLocalStorage } from '../../store/reducers/configSlice';
 
 // ==============================|| CUSTOMIZATION - CONTAINER ||============================== //
 

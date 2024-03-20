@@ -7,7 +7,7 @@ import {
   OpenFileDialogArgs,
   OpenFileDialogForImageReturnType,
   OpenFileDialogReturnType,
-} from './index.d';
+} from './types';
 
 const openFileDialog = async (arg: OpenFileDialogArgs): Promise<OpenFileDialogReturnType> => {
   try {

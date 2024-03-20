@@ -14,6 +14,9 @@ import { useTheme } from '@mui/material/styles';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const LogoMain = ({ reverse }: { reverse?: boolean }) => {
   const theme = useTheme();
+  if (reverse) {
+    console.log('reverse');
+  }
   return (
     /**
      * if you want to use image instead of svg uncomment following, and comment out <svg> element.
